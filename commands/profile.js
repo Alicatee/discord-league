@@ -44,30 +44,5 @@ module.exports = {
 				matchmessage(message,profileObject)
 			})
 		})
-	/*
-		const profile  = await fetch(`${arg}?api_key=${api_key}`).then(response => response.json());
-		const encSuID = profile.id
-		const encAcID = profile.accountId
-		
-		const profileRanked =  await fetch(`https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${encSuID}?api_key=${api_key}`).then(response => response.json());
-		const name = profile.name || 'None'
-		const level = profile.summonerLevel || 'None'
-
-		let profileSoloRanked;
-		if(profileRanked[1] && profileRanked[1].queueType == 'RANKED_SOLO_5x5'){
-			profileSoloRanked = profileRanked[1]
-		}else{
-			profileSoloRanked = profileRanked[0]
-		}
-
-		const tier = profileSoloRanked ? profileSoloRanked.tier : 'UNRANKED'
-		const rank = profileSoloRanked ? profileSoloRanked.rank : ''
-		const pdl = profileSoloRanked ? profileSoloRanked.leaguePoints : '0'
-		const wins = profileSoloRanked ? profileSoloRanked.wins : '0'
-		const losses = profileSoloRanked ? profileSoloRanked.losses : '0'
-		const wr = profileSoloRanked ? Math.round( wins  / (wins + losses) * 100) : '0'
-		
-	message.channel.send(`Name: ${name} \nLevel: ${level} \nRank: ${tier} ${rank} \nPdl: ${pdl} \nRanked Wins: ${wins} \nRanked Losses: ${losses}  \nRanked Win Rate: ${wr}`)
-*/
 },
 };
