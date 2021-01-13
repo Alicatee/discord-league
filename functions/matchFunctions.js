@@ -126,6 +126,7 @@ getsummonerid =  async function(summoner,cb){
     let hour;
     if(time == 0){
       time = "Loading Into"
+      elapsedTime = ""
     }else{
        time =  new Date(time).getTime()
        second = new Date(parseInt(time)).getSeconds()
@@ -240,7 +241,7 @@ getsummonerid =  async function(summoner,cb){
         }
       
         for(let j = 0; j < body.length; j++){
-          if(matchobject.gametype == "Ranked Solo" && body[j].queueType == "RANKED_SOLO_5x5"){
+          if(matchobject.gametype != "Ranked Flex" && body[j].queueType == "RANKED_SOLO_5x5"){
             matchobject[teamarray][i].tier = body[j].tier
             matchobject[teamarray][i].rank = body[j].rank
             matchobject[teamarray][i].wins = body[j].wins
@@ -255,6 +256,13 @@ getsummonerid =  async function(summoner,cb){
             matchobject[teamarray][i].hotStreak = body[j].hotStreak
             break
           }
+        }
+        if(body.length == 1 && matchobject.gametype != "Ranked Flex" && matchobject.gametype != "Ranked Solo"){
+          matchobject[teamarray][i].tier = body[0].tier
+          matchobject[teamarray][i].rank = body[0].rank
+          matchobject[teamarray][i].wins = body[0].wins
+          matchobject[teamarray][i].losses = body[0].losses
+          matchobject[teamarray][i].hotStreak = body[0].hotStreak
         }
       if(matchobject[teamarray][i].tier == undefined){
         matchobject[teamarray][i].tier = "UNRANKED";
@@ -275,9 +283,9 @@ getsummonerid =  async function(summoner,cb){
         if(err){
           return cb(err)
         }
-      
+        
         for(let j = 0; j < body.length; j++){
-          if(matchobject.gametype == "Ranked Solo" && body[j].queueType == "RANKED_SOLO_5x5"){
+          if(matchobject.gametype != "Ranked Flex" && body[j].queueType == "RANKED_SOLO_5x5"){
             matchobject[otherarray][i].tier = body[j].tier
             matchobject[otherarray][i].rank = body[j].rank
             matchobject[otherarray][i].wins = body[j].wins
@@ -292,6 +300,13 @@ getsummonerid =  async function(summoner,cb){
             matchobject[otherarray][i].hotStreak = body[j].hotStreak
             break
           }
+        }
+        if(body.length == 1 && matchobject.gametype != "Ranked Flex" && matchobject.gametype != "Ranked Solo"){
+          matchobject[otherarray][i].tier = body[0].tier
+          matchobject[otherarray][i].rank = body[0].rank
+          matchobject[otherarray][i].wins = body[0].wins
+          matchobject[otherarray][i].losses = body[0].losses
+          matchobject[otherarray][i].hotStreak = body[0].hotStreak
         }
         if(matchobject[otherarray][i].tier == undefined){
           matchobject[otherarray][i].tier = "UNRANKED";
@@ -319,6 +334,7 @@ getsummonerid =  async function(summoner,cb){
     }
     let enemyteam = "";
     let enemyteam2 = ""
+    let participantsOnStreak = ""
     let yourteam = "";
     let yourteam2 = ""
     
@@ -326,11 +342,17 @@ getsummonerid =  async function(summoner,cb){
       const winrate = matchObject[teamarray][i].tier != "UNRANKED" ? Math.round( matchObject[teamarray][i].wins  / (matchObject[teamarray][i].wins + matchObject[teamarray][i].losses) * 100) : '0'
       enemyteam += `${matchObject[teamarray][i].summonername} - ${matchObject[teamarray][i].championName} \n`
       enemyteam2 += `Rank: ${matchObject[teamarray][i].tier} ${matchObject[teamarray][i].rank} - WR: ${winrate}% (${matchObject[teamarray][i].wins}W,${matchObject[teamarray][i].losses}L)\n`
+      if(matchObject[teamarray][i].hotStreak){
+        participantsOnStreak += `${matchObject[teamarray][i].summonername}(${matchObject[teamarray][i].championName})\n`
+      }
     }
     for(let i = 0; i < matchObject[yourarray].length; i++){
       const winrate = matchObject[yourarray][i].tier != "UNRANKED" ? Math.round( matchObject[yourarray][i].wins  / (matchObject[yourarray][i].wins + matchObject[yourarray][i].losses) * 100) : '0'
       yourteam += `${matchObject[yourarray][i].summonername} - ${matchObject[yourarray][i].championName} \n`
       yourteam2 += `Rank: ${matchObject[yourarray][i].tier} ${matchObject[yourarray][i].rank} - WR: ${winrate}% (${matchObject[yourarray][i].wins}W,${matchObject[yourarray][i].losses}L)\n`
+      if(matchObject[yourarray][i].hotStreak){
+        participantsOnStreak += `${matchObject[yourarray][i].summonername}(${matchObject[yourarray][i].championName})\n`
+      }
     }
 
     
@@ -370,6 +392,15 @@ getsummonerid =  async function(summoner,cb){
             "value": yourteam2,
             "inline": true
           },
+          {
+            "name": '\u200B',
+            "value": '\u200B',
+          },
+          {
+            "name": "Participants on a Hot Streak:",
+            "value": participantsOnStreak != "" ? participantsOnStreak : "None",
+            "inline": false
+          }
         ]
       }
     })
