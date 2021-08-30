@@ -6,7 +6,6 @@ const urlgetrank = "https://br1.api.riotgames.com/lol/league/v4/entries/by-summo
 const request = require('node-fetch');
 const {api_key} = require('../config.json')
 const {requesterror} = require('./functions.js')
-const async = require('async')
 
 const queuearray = {
   '0': 'Custom',
