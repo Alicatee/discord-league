@@ -22,7 +22,6 @@ client.on('message', message => {
 
 
     try{
-       if(client.commands.get(command).adminCMD == true && Object.values(admin_ids).indexOf(message.author.id) == -1) return
         client.commands.get(command).execute(message,commandArg)
     } catch(error){
         console.log(error)
